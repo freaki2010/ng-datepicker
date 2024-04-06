@@ -1,0 +1,9 @@
+{
+  "name": "ng-datepicker-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/ng-datepicker-e2e/src",
+  "implicitDependencies": ["ng-datepicker"],
+  "// targets": "to see all targets run: nx show project ng-datepicker-e2e --web",
+  "targets": {}
+}
