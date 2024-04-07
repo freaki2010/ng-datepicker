@@ -1,26 +1,26 @@
 {
-  "name": "ng-datepicker",
+  "name": "ng-datepicker-demo",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "apps/ng-datepicker/src",
+  "sourceRoot": "apps/ng-datepicker-demo/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/ng-datepicker",
-        "index": "apps/ng-datepicker/src/index.html",
-        "browser": "apps/ng-datepicker/src/main.ts",
+        "outputPath": "dist/apps/ng-datepicker-demo",
+        "index": "apps/ng-datepicker-demo/src/index.html",
+        "browser": "apps/ng-datepicker-demo/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/ng-datepicker/tsconfig.app.json",
+        "tsConfig": "apps/ng-datepicker-demo/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
-          "apps/ng-datepicker/src/favicon.ico",
-          "apps/ng-datepicker/src/assets"
+          "apps/ng-datepicker-demo/src/favicon.ico",
+          "apps/ng-datepicker-demo/src/assets"
         ],
-        "styles": ["apps/ng-datepicker/src/styles.scss"],
+        "styles": ["apps/ng-datepicker-demo/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -51,10 +51,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "ng-datepicker:build:production"
+          "buildTarget": "ng-datepicker-demo:build:production"
         },
         "development": {
-          "buildTarget": "ng-datepicker:build:development"
+          "buildTarget": "ng-datepicker-demo:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -62,7 +62,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "ng-datepicker:build"
+        "buildTarget": "ng-datepicker-demo:build"
       }
     },
     "lint": {
@@ -72,7 +72,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/ng-datepicker/jest.config.ts"
+        "jestConfig": "apps/ng-datepicker-demo/jest.config.ts"
       }
     }
   }

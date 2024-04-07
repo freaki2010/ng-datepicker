@@ -1,9 +1,9 @@
 /* eslint-disable */
 export default {
-  displayName: 'ng-datepicker',
+  displayName: 'ng-datepicker-demo',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/apps/ng-datepicker',
+  coverageDirectory: '../../coverage/apps/ng-datepicker-demo',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
