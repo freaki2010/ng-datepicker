@@ -15,7 +15,6 @@ registerLocaleData(localeDe);
   styleUrl: './datepicker-tailwind.component.scss',
 })
 export class DatepickerTailwindComponent implements OnInit {
-  DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   showDatepicker = false;
   month: number;
   year: number;
@@ -23,15 +22,19 @@ export class DatepickerTailwindComponent implements OnInit {
   preMonthDays: Date[] = [];
   postMonthDays: Date[] = [];
   userLocale: string;
-  @Input() id: string = 'datepicker';
-  @Input() label: string = 'Select Date';
+  @Input() formInputId: string = 'datepicker';
+  @Input() formInputLabel: string = 'Select Date';
   @Input() disableFutureDays: boolean = false;
 
   _value: Date;
   @Input()
   set value(value: Date) {
     value.setHours(0, 0, 0, 0);
+
     this._value = value;
+    this.month = this.value.getMonth();
+    this.year = this.value.getFullYear();
+
     this.valueChange.emit(value);
   }
   get value(): Date {
@@ -41,7 +44,6 @@ export class DatepickerTailwindComponent implements OnInit {
   @Output() valueChange = new EventEmitter<Date>();
 
   constructor() {
-    // TODO kein plan check
     this._value = new Date();
     this._value.setHours(0, 0, 0, 0);
 
@@ -60,14 +62,18 @@ export class DatepickerTailwindComponent implements OnInit {
     today.setHours(0, 0, 0, 0);
 
     if (this.value.getTime() === day.getTime()) {
-      return 'bg-slate-500 text-white';
+      return 'bg-dpprimary-500 text-white hover:cursor-pointer';
     } else if (today.getTime() === day.getTime()) {
-      return 'bg-blue-500 text-white';
+      return 'bg-dpsecondary-500 text-white hover:cursor-pointer';
+    } else if (day.getMonth() != this.month && this.disableFutureDays && day.getTime() > today.getTime()) {
+      return 'text-dpprimary-500 opacity-60 hover:cursor-default';
+    } else if (day.getMonth() != this.month) {
+      return 'text-dpprimary-500 opacity-60 hover:cursor-pointer';
     } else if (this.disableFutureDays && day.getTime() > today.getTime()) {
-      return 'text-gray-700 opacity-60 hover:cursor-default';
+      return 'text-dpsecondary-700 opacity-60 hover:cursor-default';
     }
 
-    return 'text-gray-700 hover:bg-blue-200';
+    return 'text-dpsecondary-700 hover:bg-dpprimary-200 hover:cursor-pointer';
   }
 
   setDateValue(date: Date) {
@@ -76,56 +82,56 @@ export class DatepickerTailwindComponent implements OnInit {
     }
 
     this.value = date;
-    this.showDatepicker = false;
+    this.month = date.getMonth();
+    this.year = date.getFullYear();
+    this.updateCalendarEntries();
   }
 
   updateCalendarEntries() {
-    this.setDaysOfMonth();
-    this.setPreCurrentMonthDays();
+    this.daysOfMonth = [];
+    const firstDay = new Date(this.year, this.month);
+    this.setPreCurrentMonthDays(firstDay);
+    this.setDaysOfMonth(firstDay);
     this.setPostCurrentMonthDays();
   }
 
-  private setDaysOfMonth() {
-    let currentDay = new Date(this.year, this.month);
+  private setPreCurrentMonthDays(firstDay: Date) {
+    let dayOfWeek = firstDay.getDay();
+    let preMonthDay = firstDay.getTime();
 
-    const days = [];
-    while (currentDay.getMonth() == this.month) {
-      days.push(currentDay);
-      currentDay = new Date(this.year, this.month, currentDay.getDate() + 1);
+    for (let i = 0; i < dayOfWeek; i++) {
+      preMonthDay = firstDay.getTime() - 86400000 * (dayOfWeek - i);
+      this.daysOfMonth.push(new Date(preMonthDay));
     }
-    this.daysOfMonth = days;
   }
 
-  private setPreCurrentMonthDays() {
-    let dayOfWeek = this.daysOfMonth[0].getDay();
-    let dates = [];
-    let preMonthDays = this.daysOfMonth[0].getTime();
-
-    for (let i = 1; i <= dayOfWeek; i++) {
-      preMonthDays -= 86400000;
-      dates.push(new Date(preMonthDays));
+  private setDaysOfMonth(currentDay: Date) {
+    while (currentDay.getMonth() == this.month) {
+      this.daysOfMonth.push(currentDay);
+      currentDay = new Date(this.year, this.month, currentDay.getDate() + 1);
     }
-
-    this.preMonthDays = dates;
   }
 
   private setPostCurrentMonthDays() {
     let dayOfWeek = this.daysOfMonth[this.daysOfMonth.length - 1].getDay() + 1;
-    let dates = [];
     let postMonthDays = this.daysOfMonth[this.daysOfMonth.length - 1].getTime();
 
     for (let i = dayOfWeek; i < 7; i++) {
       postMonthDays += 86400000;
-      dates.push(new Date(postMonthDays));
+      this.daysOfMonth.push(new Date(postMonthDays));
     }
-
-    this.postMonthDays = dates;
   }
 
   getMonthName(): string {
     return moment(this.month + 1, 'M')
       .locale(this.userLocale)
       .format('MMMM');
+  }
+
+  getDayName(day: number): string {
+    return moment(day, 'e')
+    .locale(this.userLocale)
+    .format('ddd')
   }
 
   decreaseMonth(): void {
@@ -147,6 +153,4 @@ export class DatepickerTailwindComponent implements OnInit {
 
     ++this.month;
   }
-
-  trackByIdentity = (index: number, item: any) => item;
 }

@@ -16,4 +16,5 @@ import { DatepickerTailwindComponent } from '@yatafu/datepicker';
 })
 export class AppComponent {
   title = 'ng-datepicker';
+  date = new Date('2023-07-07')
 }
