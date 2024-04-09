@@ -23,6 +23,7 @@ export class FormInput {
   styleUrl: './datepicker-tailwind.component.scss',
 })
 export class DatepickerTailwindComponent implements OnInit {
+  private timeOfOneDay = 86400000;
   showDatepicker = false;
   month: number;
   year: number;
@@ -79,23 +80,23 @@ export class DatepickerTailwindComponent implements OnInit {
   updateCalendarEntries() {
     this.daysOfMonth = [];
     const firstDay = new Date(this.year, this.month);
-    this.setPreCurrentMonthDays(firstDay);
-    this.setDaysOfMonth(firstDay);
-    this.setPostCurrentMonthDays();
+    this.fillPreMonthDays(firstDay);
+    this.fillCurrentMonthDays(firstDay);
+    this.fillPostMonthDays();
   }
 
-  private setPreCurrentMonthDays(firstDay: Date) {
+  private fillPreMonthDays(firstDay: Date) {
     const dayOfWeek = firstDay.getDay();
-    let preMonthDay = firstDay.getTime();
+    let time = firstDay.getTime();
 
     for (let i = 0; i < dayOfWeek; i++) {
-      preMonthDay = firstDay.getTime() - 86400000 * (dayOfWeek - i);
+      time -= this.timeOfOneDay;
 
-      this.daysOfMonth.push(this.createDayObject(new Date(preMonthDay)));
+      this.daysOfMonth.unshift(this.createDayObject(new Date(time)));
     }
   }
 
-  private setDaysOfMonth(currentDay: Date) {
+  private fillCurrentMonthDays(currentDay: Date) {
     while (currentDay.getMonth() == this.month) {
       this.daysOfMonth.push(this.createDayObject(new Date(currentDay), true));
 
@@ -103,14 +104,14 @@ export class DatepickerTailwindComponent implements OnInit {
     }
   }
 
-  private setPostCurrentMonthDays() {
+  private fillPostMonthDays() {
     const dayOfWeek = this.daysOfMonth[this.daysOfMonth.length - 1].date.getDay() + 1;
-    let postMonthDays = this.daysOfMonth[this.daysOfMonth.length - 1].date.getTime();
+    let time = this.daysOfMonth[this.daysOfMonth.length - 1].date.getTime();
 
     for (let i = dayOfWeek; i < 7; i++) {
-      postMonthDays += 86400000;
+      time += this.timeOfOneDay;
 
-      this.daysOfMonth.push(this.createDayObject(new Date(postMonthDays)));
+      this.daysOfMonth.push(this.createDayObject(new Date(time)));
     }
   }
 
