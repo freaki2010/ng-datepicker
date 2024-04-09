@@ -4,12 +4,19 @@ import { CommonModule } from '@angular/common';
 import moment from 'moment/min/moment-with-locales';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
-import { DayComponent } from './day/day.component';
+import { Day, DayComponent } from './day/day.component';
 
 registerLocaleData(localeDe);
 
+export class FormInput {
+  constructor(
+    public label: string,
+    public id: string,
+  ){}
+}
+
 @Component({
-  selector: 'yatafu-datepicker-tailwind',
+  selector: 'lib-yatafu-datepicker-tw',
   standalone: true,
   imports: [CommonModule, FormsModule, DayComponent],
   templateUrl: './datepicker-tailwind.component.html',
@@ -19,37 +26,34 @@ export class DatepickerTailwindComponent implements OnInit {
   showDatepicker = false;
   month: number;
   year: number;
-  daysOfMonth: Date[] = [];
-  preMonthDays: Date[] = [];
-  postMonthDays: Date[] = [];
+  daysOfMonth: Day[] = [];
   userLocale: string;
-  @Input() formInputId: string = 'datepicker';
-  @Input() formInputLabel: string = 'Select Date';
-  @Input() disableFutureDays: boolean = false;
+  @Input() formInput: FormInput = new FormInput('Select date', 'yatafu-datepicker')
+  @Input() disableFutureDays = false;
 
-  _value: Date;
+  _selectedDate: Date;
   @Input()
-  set value(value: Date) {
-    value.setHours(0, 0, 0, 0);
+  set selectedDate(selectedDate: Date) {
+    selectedDate.setHours(0, 0, 0, 0);
 
-    this._value = value;
-    this.month = this.value.getMonth();
-    this.year = this.value.getFullYear();
+    this._selectedDate = selectedDate;
+    this.month = this.selectedDate.getMonth();
+    this.year = this.selectedDate.getFullYear();
 
-    this.valueChange.emit(value);
+    this.valueChange.emit(selectedDate);
   }
-  get value(): Date {
-    return this._value;
+
+  get selectedDate(): Date {
+    return this._selectedDate;
   }
 
   @Output() valueChange = new EventEmitter<Date>();
 
   constructor() {
-    this._value = new Date();
-    this._value.setHours(0, 0, 0, 0);
+    this._selectedDate = new Date();
 
-    this.month = this.value.getMonth();
-    this.year = this.value.getFullYear();
+    this.month = this.selectedDate.getMonth();
+    this.year = this.selectedDate.getFullYear();
 
     this.userLocale = navigator.language || navigator.languages[0];
   }
@@ -58,14 +62,17 @@ export class DatepickerTailwindComponent implements OnInit {
     this.updateCalendarEntries();
   }
 
-  setDateValue(date: Date) {
+  toggleDatepicker() {
+    this.showDatepicker = !this.showDatepicker;
+  }
+
+  selectDate(date: Date) {
     if (this.disableFutureDays && date.getTime() > new Date().getTime()) {
       return;
     }
 
-    this.value = date;
-    this.month = date.getMonth();
-    this.year = date.getFullYear();
+    this.selectedDate = date;
+
     this.updateCalendarEntries();
   }
 
@@ -78,30 +85,47 @@ export class DatepickerTailwindComponent implements OnInit {
   }
 
   private setPreCurrentMonthDays(firstDay: Date) {
-    let dayOfWeek = firstDay.getDay();
+    const dayOfWeek = firstDay.getDay();
     let preMonthDay = firstDay.getTime();
 
     for (let i = 0; i < dayOfWeek; i++) {
       preMonthDay = firstDay.getTime() - 86400000 * (dayOfWeek - i);
-      this.daysOfMonth.push(new Date(preMonthDay));
+
+      this.daysOfMonth.push(this.createDayObject(new Date(preMonthDay)));
     }
   }
 
   private setDaysOfMonth(currentDay: Date) {
     while (currentDay.getMonth() == this.month) {
-      this.daysOfMonth.push(currentDay);
+      this.daysOfMonth.push(this.createDayObject(new Date(currentDay), true));
+
       currentDay = new Date(this.year, this.month, currentDay.getDate() + 1);
     }
   }
 
   private setPostCurrentMonthDays() {
-    let dayOfWeek = this.daysOfMonth[this.daysOfMonth.length - 1].getDay() + 1;
-    let postMonthDays = this.daysOfMonth[this.daysOfMonth.length - 1].getTime();
+    const dayOfWeek = this.daysOfMonth[this.daysOfMonth.length - 1].date.getDay() + 1;
+    let postMonthDays = this.daysOfMonth[this.daysOfMonth.length - 1].date.getTime();
 
     for (let i = dayOfWeek; i < 7; i++) {
       postMonthDays += 86400000;
-      this.daysOfMonth.push(new Date(postMonthDays));
+
+      this.daysOfMonth.push(this.createDayObject(new Date(postMonthDays)));
     }
+  }
+
+  private createDayObject(date: Date, isInCalendarMonth = false): Day 
+  {
+      const today = new Date()
+      today.setHours(0,0,0,0)
+
+      return new Day(
+        date,
+        isInCalendarMonth,
+        (this._selectedDate.getTime() === date.getTime()),
+        (this.disableFutureDays && date.getTime() > today.getTime()),
+        (today.getTime() === date.getTime())
+      )
   }
 
   getMonthName(): string {

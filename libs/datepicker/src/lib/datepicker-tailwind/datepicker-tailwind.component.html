@@ -1,120 +1,97 @@
 <div class="flex items-center justify-center bg-white">
   <div class="antialiased sans-serif">
     <div>
-      <div class="container">
-        <div class="w-full">
-          <label
-            for="datepicker"
-            class="font-normal text-sm mb-0.5 text-dpsecondary-700"
-            >{{ formInputLabel }}</label
-          >
-          <div class="relative">
-            <input
-              id="{{ formInputId }}"
-              type="text"
-              (click)="showDatepicker = !showDatepicker"
-              (keydown.escape)="showDatepicker = false"
-              value="{{ value | date : 'mediumDate' : undefined : userLocale }}"
-              class="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-dpsecondary-600 font-medium"
-              placeholder="Select date"
-            />
+      <div class="container w-full relative">
+        <label
+          for="datepicker"
+          class="font-normal text-sm mb-0.5 text-dpsecondary-700"
+          >{{ formInput.label }}</label
+        >
+        <input
+          #datepicker
+          id="{{ formInput.id }}"
+          type="text"
+          (click)="toggleDatepicker()"
+          (keydown.escape)="toggleDatepicker()"
+          value="{{
+            selectedDate | date : 'mediumDate' : undefined : userLocale
+          }}"
+          class="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-dpsecondary-600 font-medium datepicker-input-svg"
+          placeholder="Select date"
+          readonly
+        />
 
-            <div class="absolute top-0 right-0 px-3 py-2">
-              <svg
-                class="h-6 w-6 text-dpsecondary-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+        <div
+          class="bg-white rounded-lg shadow p-4 w-full absolute top-20 left-0"
+          *ngIf="showDatepicker"
+        >
+          <div class="flex justify-between items-center mb-2">
+            <div>
+              <span class="text-lg font-bold text-dpsecondary-800">{{
+                getMonthName()
+              }}</span>
+              <span class="ml-1 text-lg text-dpsecondary-600 font-normal">{{
+                year
+              }}</span>
+            </div>
+            <div>
+              <button
+                type="button"
+                class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-dpsecondary-200 p-1 rounded-full"
+                (click)="decreaseMonth(); updateCalendarEntries()"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
+                <svg
+                  class="h-6 w-6 text-dpsecondary-500 inline-flex"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-dpsecondary-200 p-1 rounded-full"
+                (click)="increaseMonth(); updateCalendarEntries()"
+              >
+                <svg
+                  class="h-6 w-6 text-dpsecondary-500 inline-flex"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
             </div>
-            <div
-              class="bg-white rounded-lg shadow p-4 w-full absolute top-12 left-0"
-              [hidden]="!showDatepicker"
-              (blur)="showDatepicker = false"
+          </div>
+
+          <div class="grid grid-cols-7 gap-1 align-middle">
+            <ng-container *ngFor="let item of [].constructor(7); let i = index">
+              <div class="text-dpsecondary-800 font-medium text-center text-xs">
+                {{ getDayName(i) }}
+              </div>
+            </ng-container>
+
+            <ng-container
+              *ngFor="let day of daysOfMonth; let dateIndex = index"
             >
-              <div class="flex justify-between items-center mb-2">
-                <div>
-                  <span class="text-lg font-bold text-dpsecondary-800">{{
-                    getMonthName()
-                  }}</span>
-                  <span class="ml-1 text-lg text-dpsecondary-600 font-normal">{{
-                    year
-                  }}</span>
-                </div>
-                <div>
-                  <button
-                    type="button"
-                    class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-dpsecondary-200 p-1 rounded-full"
-                    (click)="decreaseMonth(); updateCalendarEntries()"
-                  >
-                    <svg
-                      class="h-6 w-6 text-dpsecondary-500 inline-flex"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
-                  </button>
-                  <button
-                    type="button"
-                    class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-dpsecondary-200 p-1 rounded-full"
-                    (click)="increaseMonth(); updateCalendarEntries()"
-                  >
-                    <svg
-                      class="h-6 w-6 text-dpsecondary-500 inline-flex"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-7 gap-1 align-middle">
-                <ng-container
-                  *ngFor="let item of [].constructor(7); let i = index"
-                >
-                  <div
-                    class="text-dpsecondary-800 font-medium text-center text-xs"
-                  >
-                    {{ getDayName(i) }}
-                  </div>
-                </ng-container>
-
-                <ng-container
-                  *ngFor="let day of daysOfMonth; let dateIndex = index"
-                >
-                  <lib-day
-                    (newDayEvent)="setDateValue($event)"
-                    [disableFutureDays]="disableFutureDays"
-                    [day]="day"
-                    [userLocale]="userLocale"
-                    [calendarMonth]="month"
-                    [isSelected]="(day | date) === (value | date)"
-                  ></lib-day>
-                </ng-container>
-              </div>
-            </div>
+              <lib-day
+                (newDayEvent)="selectDate($event)"
+                [userLocale]="userLocale"
+                [day]="day"
+              ></lib-day>
+            </ng-container>
           </div>
         </div>
       </div>

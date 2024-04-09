@@ -1,7 +1,6 @@
-<h1>Lebt</h1>
-<yatafu-datepicker-tailwind
-  [value]="date"
+<lib-yatafu-datepicker-tw
+  [selectedDate]="date"
   [disableFutureDays]="true"
-  formInputId="to"
-  formInputLabel="Bis"
-></yatafu-datepicker-tailwind>
+  [formInput]="{ label: 'Label', id: 'Id' }"
+  class="mt-4"
+></lib-yatafu-datepicker-tw>

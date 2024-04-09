@@ -1,5 +1,7 @@
-// @tailwind base;
-// @tailwind components;
-// @tailwind utilities;
-
-// /* You can add global styles to this file, and also import other style files */
+.datepicker-input-svg {
+    padding-right: 40px; /* Platz für das SVG-Icon */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center; /* Rechtsbündig, 10px vom rechten Rand */
+    background-size: 24px; /* Größe des SVG-Icons */
+}

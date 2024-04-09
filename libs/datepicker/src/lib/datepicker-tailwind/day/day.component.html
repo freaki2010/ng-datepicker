@@ -1,7 +1,7 @@
 <div
-  (click)="clickDay()"
+  (click)="newDayEvent.emit(this.day.date)"
   class="text-center text-sm rounded-full h-7 w-7 p-1 transition ease-in-out| duration-100"
-  [ngClass]="getClassForDay(day)"
+  [ngClass]="getClassForDay()"
 >
-  {{ day | date : 'dd' : undefined : userLocale }}
+  {{ day.date | date : 'dd' : undefined : userLocale }}
 </div>
