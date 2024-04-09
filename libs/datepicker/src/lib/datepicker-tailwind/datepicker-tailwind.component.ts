@@ -5,6 +5,7 @@ import moment from 'moment/min/moment-with-locales';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { Day, DayComponent } from './day/day.component';
+import { DayIdentifierComponent } from './day-identifier/day-identifier.component';
 
 registerLocaleData(localeDe);
 
@@ -18,7 +19,7 @@ export class FormInput {
 @Component({
   selector: 'lib-yatafu-datepicker-tw',
   standalone: true,
-  imports: [CommonModule, FormsModule, DayComponent],
+  imports: [CommonModule, FormsModule, DayComponent, DayIdentifierComponent],
   templateUrl: './datepicker-tailwind.component.html',
   styleUrl: './datepicker-tailwind.component.scss',
 })
@@ -133,12 +134,6 @@ export class DatepickerTailwindComponent implements OnInit {
     return moment(this.month + 1, 'M')
       .locale(this.userLocale)
       .format('MMMM');
-  }
-
-  getDayName(day: number): string {
-    return moment(day, 'e')
-    .locale(this.userLocale)
-    .format('ddd')
   }
 
   decreaseMonth(): void {

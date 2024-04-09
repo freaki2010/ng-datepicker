@@ -76,22 +76,19 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-7 gap-1 align-middle">
-            <ng-container *ngFor="let item of [].constructor(7); let i = index">
-              <div class="text-dpsecondary-800 font-medium text-center text-xs">
-                {{ getDayName(i) }}
-              </div>
-            </ng-container>
+          <div class="grid grid-cols-7 gap-0.5">
+            <lib-yatafu-day-identifier
+              *ngFor="let item of [].constructor(7); let i = index"
+              [userLocale]="userLocale"
+              [day]="i"
+            ></lib-yatafu-day-identifier>
 
-            <ng-container
+            <lib-day
               *ngFor="let day of daysOfMonth; let dateIndex = index"
-            >
-              <lib-day
-                (newDayEvent)="selectDate($event)"
-                [userLocale]="userLocale"
-                [day]="day"
-              ></lib-day>
-            </ng-container>
+              (newDayEvent)="selectDate($event)"
+              [userLocale]="userLocale"
+              [day]="day"
+            ></lib-day>
           </div>
         </div>
       </div>
