@@ -4,13 +4,14 @@ import { CommonModule } from '@angular/common';
 import moment from 'moment/min/moment-with-locales';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
+import { DayComponent } from './day/day.component';
 
 registerLocaleData(localeDe);
 
 @Component({
   selector: 'yatafu-datepicker-tailwind',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DayComponent],
   templateUrl: './datepicker-tailwind.component.html',
   styleUrl: './datepicker-tailwind.component.scss',
 })
@@ -55,25 +56,6 @@ export class DatepickerTailwindComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateCalendarEntries();
-  }
-
-  getClassForDay(day: Date): string {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (this.value.getTime() === day.getTime()) {
-      return 'bg-dpprimary-500 text-white hover:cursor-pointer';
-    } else if (today.getTime() === day.getTime()) {
-      return 'bg-dpsecondary-500 text-white hover:cursor-pointer';
-    } else if (day.getMonth() != this.month && this.disableFutureDays && day.getTime() > today.getTime()) {
-      return 'text-dpprimary-500 opacity-60 hover:cursor-default';
-    } else if (day.getMonth() != this.month) {
-      return 'text-dpprimary-500 opacity-60 hover:cursor-pointer';
-    } else if (this.disableFutureDays && day.getTime() > today.getTime()) {
-      return 'text-dpsecondary-700 opacity-60 hover:cursor-default';
-    }
-
-    return 'text-dpsecondary-700 hover:bg-dpprimary-200 hover:cursor-pointer';
   }
 
   setDateValue(date: Date) {

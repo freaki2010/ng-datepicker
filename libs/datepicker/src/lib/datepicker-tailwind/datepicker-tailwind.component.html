@@ -104,13 +104,14 @@
                 <ng-container
                   *ngFor="let day of daysOfMonth; let dateIndex = index"
                 >
-                  <div
-                    (click)="setDateValue(day)"
-                    class="text-center text-sm rounded-full h-7 w-7 p-1 transition ease-in-out| duration-100"
-                    [ngClass]="getClassForDay(day)"
-                  >
-                    {{ day | date : 'dd' : undefined : userLocale }}
-                  </div>
+                  <lib-day
+                    (newDayEvent)="setDateValue($event)"
+                    [disableFutureDays]="disableFutureDays"
+                    [day]="day"
+                    [userLocale]="userLocale"
+                    [calendarMonth]="month"
+                    [isSelected]="(day | date) === (value | date)"
+                  ></lib-day>
                 </ng-container>
               </div>
             </div>
