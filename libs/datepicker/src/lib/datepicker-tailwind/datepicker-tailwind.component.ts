@@ -6,6 +6,7 @@ import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { Day, DayComponent } from './day/day.component';
 import { DayIdentifierComponent } from './day-identifier/day-identifier.component';
+import { NavigationButtonComponent } from './navigation-button/navigation-button.component';
 
 registerLocaleData(localeDe);
 
@@ -19,7 +20,7 @@ export class FormInput {
 @Component({
   selector: 'lib-yatafu-datepicker-tw',
   standalone: true,
-  imports: [CommonModule, FormsModule, DayComponent, DayIdentifierComponent],
+  imports: [CommonModule, FormsModule, DayComponent, DayIdentifierComponent, NavigationButtonComponent],
   templateUrl: './datepicker-tailwind.component.html',
   styleUrl: './datepicker-tailwind.component.scss',
 })

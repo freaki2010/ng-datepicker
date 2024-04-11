@@ -1,0 +1,40 @@
+<div>
+  <button
+    type="button"
+    class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-dpsecondary-200 p-1 rounded-full"
+    (click)="decreaseClick.emit()"
+  >
+    <svg
+      class="h-6 w-6 text-dpsecondary-500 inline-flex"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M15 19l-7-7 7-7"
+      />
+    </svg>
+  </button>
+  <button
+    type="button"
+    class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-dpsecondary-200 p-1 rounded-full"
+    (click)="increaseClick.emit()"
+  >
+    <svg
+      class="h-6 w-6 text-dpsecondary-500 inline-flex"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M9 5l7 7-7 7"
+      />
+    </svg>
+  </button>
+</div>
